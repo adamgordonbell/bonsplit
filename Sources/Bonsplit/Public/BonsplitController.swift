@@ -345,6 +345,14 @@ public final class BonsplitController {
         delegate?.splitTabBar(self, didSelectTab: tab, inPane: pane.id)
     }
 
+    /// Select a tab by ID WITHOUT moving pane focus and WITHOUT notifying the
+    /// delegate — reveal semantics. The caller applies its own selection
+    /// side-effects (panel visibility) with focus reassertion suppressed.
+    public func revealTab(_ tabId: TabID) {
+        guard let (pane, _) = findTabInternal(tabId) else { return }
+        pane.selectTab(tabId.id)
+    }
+
     /// Move a tab to a specific pane (and optional index) inside this controller.
     /// - Parameters:
     ///   - tabId: The tab to move.
