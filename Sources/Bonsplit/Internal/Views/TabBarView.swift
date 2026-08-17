@@ -786,6 +786,8 @@ struct TabContextMenuState {
     var canDisconnectRemote: Bool = false
     /// Shared-terminal presence; non-nil adds the terminal-size menu section.
     var presence: TabPresence?
+    /// Directory the "Set Sidebar Root Here" action would pin to, or `nil` to hide it.
+    var sidebarRootDirectory: String?
 
     var canMarkAsUnread: Bool {
         !isUnread
@@ -815,7 +817,8 @@ struct TabContextMenuState {
         hasSplits: Bool,
         shortcuts: [TabContextAction: KeyboardShortcut],
         canDisconnectRemote: Bool = false,
-        presence: TabPresence? = nil
+        presence: TabPresence? = nil,
+        sidebarRootDirectory: String? = nil
     ) {
         self.isPinned = isPinned
         self.canCloseTab = canCloseTab
@@ -837,6 +840,7 @@ struct TabContextMenuState {
         self.shortcuts = shortcuts
         self.canDisconnectRemote = canDisconnectRemote
         self.presence = presence
+        self.sidebarRootDirectory = sidebarRootDirectory
     }
 
     @MainActor
@@ -880,7 +884,8 @@ struct TabContextMenuState {
             hasSplits: splitViewController.rootNode.allPaneIds.count > 1,
             shortcuts: controller.contextMenuShortcuts,
             canDisconnectRemote: controller.tabContextDisconnectRemoteAvailabilityProvider?(TabID(id: tab.id), pane.id) ?? false,
-            presence: tab.presence
+            presence: tab.presence,
+            sidebarRootDirectory: controller.tabContextSidebarRootProvider?(TabID(id: tab.id), pane.id)
         )
     }
 }
