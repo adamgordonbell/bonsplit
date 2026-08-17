@@ -697,6 +697,8 @@ struct TabContextMenuState {
     let hasSplits: Bool
     let shortcuts: [TabContextAction: KeyboardShortcut]
     var canDisconnectRemote: Bool = false
+    /// Directory the "Set Sidebar Root Here" action would pin to, or `nil` to hide it.
+    var sidebarRootDirectory: String?
 
     var canMarkAsUnread: Bool {
         !isUnread
@@ -724,7 +726,8 @@ struct TabContextMenuState {
         isFullWidthTabMode: Bool = false,
         hasSplits: Bool,
         shortcuts: [TabContextAction: KeyboardShortcut],
-        canDisconnectRemote: Bool = false
+        canDisconnectRemote: Bool = false,
+        sidebarRootDirectory: String? = nil
     ) {
         self.isPinned = isPinned
         self.isUnread = isUnread
@@ -744,6 +747,7 @@ struct TabContextMenuState {
         self.hasSplits = hasSplits
         self.shortcuts = shortcuts
         self.canDisconnectRemote = canDisconnectRemote
+        self.sidebarRootDirectory = sidebarRootDirectory
     }
 
     @MainActor
@@ -785,7 +789,8 @@ struct TabContextMenuState {
             isFullWidthTabMode: pane.isFullWidthTabMode,
             hasSplits: splitViewController.rootNode.allPaneIds.count > 1,
             shortcuts: controller.contextMenuShortcuts,
-            canDisconnectRemote: controller.tabContextDisconnectRemoteAvailabilityProvider?(TabID(id: tab.id), pane.id) ?? false
+            canDisconnectRemote: controller.tabContextDisconnectRemoteAvailabilityProvider?(TabID(id: tab.id), pane.id) ?? false,
+            sidebarRootDirectory: controller.tabContextSidebarRootProvider?(TabID(id: tab.id), pane.id)
         )
     }
 }

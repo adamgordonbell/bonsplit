@@ -1506,6 +1506,21 @@ enum TabContextMenuBuilder {
             )
         }
 
+        if let sidebarRootDirectory = state.sidebarRootDirectory {
+            menu.addItem(.separator())
+            let format = localized(
+                "tabContext.setSidebarRootHere",
+                defaultValue: "Set Sidebar Root to “%@”"
+            )
+            addAction(
+                title: String(format: format, (sidebarRootDirectory as NSString).lastPathComponent),
+                action: .setSidebarRootHere,
+                state: state,
+                target: target,
+                to: menu
+            )
+        }
+
         if state.canDisconnectRemote {
             menu.addItem(.separator())
             addAction(
@@ -1751,7 +1766,8 @@ enum TabContextMenuBuilder {
              .markAsUnread,
              .toggleZoom,
              .toggleFullWidthTab,
-             .disconnectRemote:
+             .disconnectRemote,
+             .setSidebarRootHere:
             assertionFailure("Non-fork action cannot be the default fork destination: \(action)")
             return localized(
                 "tabContext.forkConversation.default.right",

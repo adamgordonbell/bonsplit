@@ -30,6 +30,7 @@ public enum TabContextAction: String, CaseIterable, Sendable {
     case toggleZoom
     case toggleFullWidthTab
     case disconnectRemote
+    case setSidebarRootHere
     case forkConversation
     case forkConversationRight
     case forkConversationLeft
